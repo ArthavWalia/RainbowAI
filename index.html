@@ -4,42 +4,236 @@
   <meta charset="UTF-8">
   <title>Rainbow AI - Smart Assistant</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #fce4ec);
-      color: #2c3e50;
+      background: linear-gradient(to bottom right, #fce4ec, #e0f7fa);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: linear-gradient(to right, #ff6ec4, #7873f5);
+      color: white;
+      padding: 20px;
       text-align: center;
-      padding: 50px;
+      font-size: 26px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-    h1 {
-      font-size: 3em;
-      margin-bottom: 0.3em;
-      background: linear-gradient(90deg, #ff6ec4, #7873f5);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .header img {
+      width: 40px;
+      height: 40px;
     }
 
-    p {
-      font-size: 1.2em;
-      max-width: 700px;
-      margin: 0 auto;
+    .switch-btn {
+      text-align: center;
+      padding: 10px;
+      background: #fff3e0;
     }
 
-    .tagline {
-      font-style: italic;
-      color: #555;
-      margin-top: 1em;
+    .switch-btn button {
+      background: #ff6ec4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .switch-btn button:hover {
+      background: #e252b3;
+    }
+
+    .chatbox {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      max-width: 70%;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .user {
+      background-color: #d1c4e9;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .bot {
+      background-color: #fff9c4;
+      align-self: flex-start;
+      margin-right: auto;
+      position: relative;
+    }
+
+    .bot.typing::after {
+      content: '⠋⠙⠹';
+      animation: typing 1s steps(3, end) infinite;
+      font-weight: bold;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 15px;
+      background: #fff;
+      border-top: 1px solid #ccc;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .input-area button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #7873f5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .input-area button:hover {
+      background: #5e55d2;
+    }
+
+    #tidio-section {
+      display: none;
+      flex: 1;
+      padding: 20px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes typing {
+      0% { content: "⠋"; }
+      33% { content: "⠙"; }
+      66% { content: "⠹"; }
     }
   </style>
 </head>
 <body>
 
-  <h1>🌈 Rainbow AI</h1>
-  <p>Meet Rainbow AI — your intelligent virtual assistant designed to boost productivity, simplify daily tasks, and bring a colorful spark to your workflow.</p>
-  <p class="tagline">“Built over 4 months to make your life easier — one message at a time.”</p>
+  <div class="header">
+    <img src="https://cdn-icons-png.flaticon.com/512/9798/9798256.png" alt="Logo">
+    🌈 Rainbow AI — Smart Assistant
+  </div>
 
-  <!-- Tidio Chatbot Script -->
-  <script src="//code.tidio.co/qohdmom7uriqmygwt5fb6bpdagnmnfep.js" async></script>
+  <div class="switch-btn">
+    <button onclick="showTidio()">Switch to Rainbow AI Live Chat</button>
+  </div>
+
+  <!-- Fake Chat -->
+  <div id="fake-chat">
+    <div class="chatbox" id="chatbox">
+      <div class="message bot">Hello! I'm Rainbow AI. How can I help you today?</div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Real Tidio Chat -->
+  <div id="tidio-section">
+    <iframe src="https://www.tidio.com/talk/qohdmom7uriqmygwt5fb6bpdagnmnfep" allow="microphone; camera;"></iframe>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chatbox = document.getElementById("chatbox");
+      const message = input.value.trim();
+      if (message === "") return;
+
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.textContent = message;
+      chatbox.appendChild(userMsg);
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      // Add typing animation
+      const botTyping = document.createElement("div");
+      botTyping.className = "message bot typing";
+      botTyping.textContent = "Rainbow AI is typing...";
+      chatbox.appendChild(botTyping);
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      setTimeout(() => {
+        botTyping.remove();
+        const botMsg = document.createElement("div");
+        botMsg.className = "message bot";
+        botMsg.textContent = getBotReply(message);
+        chatbox.appendChild(botMsg);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }, 1000);
+
+      input.value = "";
+    }
+
+    function getBotReply(msg) {
+      msg = msg.toLowerCase();
+
+      if (msg.includes("hello") || msg.includes("hi")) {
+        return "Hey there! How can I assist you today?";
+      } else if (msg.includes("time")) {
+        return "The current time is " + new Date().toLocaleTimeString();
+      } else if (msg.includes("date")) {
+        return "Today’s date is " + new Date().toLocaleDateString();
+      } else if (msg.includes("who made you")) {
+        return "I was proudly made by my genius creator — that's YOU! 👑";
+      } else if (msg.includes("your name")) {
+        return "I’m Rainbow AI 🌈, your colorful little assistant!";
+      } else if (msg.includes("project")) {
+        return "This project is designed to showcase AI chatbot features using HTML, JS and Tidio integration.";
+      } else if (msg.includes("how are you")) {
+        return "I’m feeling electric ⚡ and full of code!";
+      } else {
+        return "Hmm, that’s interesting. Tell me more!";
+      }
+    }
+
+    function showTidio() {
+      document.getElementById("fake-chat").style.display = "none";
+      document.getElementById("tidio-section").style.display = "flex";
+    }
+  </script>
+
 </body>
 </html>
