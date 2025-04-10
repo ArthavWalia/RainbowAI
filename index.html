@@ -63,11 +63,12 @@
       text-align: center;
       padding: 100px 20px;
       animation: fadeUp 1.2s ease;
+      position: relative;
+      z-index: 1;
     }
 
     .hero h2,
-    .hero p,
-    .hero button {
+    .hero p {
       background: linear-gradient(90deg, #a855f7, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -85,26 +86,29 @@
       margin: 20px auto;
     }
 
-    .hero .buttons {
-      margin-top: 30px;
+    .chat-arrow {
+      font-size: 40px;
+      animation: bounceDown 1.5s infinite;
+      color: #a855f7;
+      text-shadow: 0 0 10px #a855f7;
+      margin-top: 60px;
     }
 
-    .hero button {
-      padding: 12px 24px;
-      margin: 10px;
-      font-size: 16px;
-      border: 2px solid #8b5cf6;
-      border-radius: 6px;
-      background-color: transparent;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
+    @keyframes bounceDown {
+      0% {
+        transform: translateY(0);
+        opacity: 0.8;
+      }
 
-    .hero button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 15px #a855f7;
+      50% {
+        transform: translateY(10px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(0);
+        opacity: 0.8;
+      }
     }
 
     @keyframes fadeUp {
@@ -124,6 +128,8 @@
       padding: 30px;
       background: #111;
       font-weight: bold;
+      z-index: 2;
+      position: relative;
     }
 
     df-messenger {
@@ -141,15 +147,88 @@
       --df-messenger-minimized-chatbox-height: 60px;
     }
 
-    /* Glowing ring around minimized button (if supported) */
     df-messenger::part(chat-button) {
       box-shadow: 0 0 15px #a855f7, 0 0 30px #6366f1;
       border-radius: 50%;
+    }
+
+    /* ❄️ Snowflake + ✨ Sparkle effects */
+    .snowflake, .sparkle {
+      position: fixed;
+      top: -10px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .snowflake {
+      color: #a855f7;
+      font-size: 20px;
+      animation: fall linear infinite;
+    }
+
+    .sparkle {
+      color: #ffffff44;
+      font-size: 10px;
+      animation: sparkleFall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sparkleFall {
+      0% {
+        transform: translateY(0);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- 🎵 Background Music -->
+  <audio autoplay loop volume="0.1">
+    <source src="https://cdn.pixabay.com/download/audio/2022/12/23/audio_7e01fda2c3.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ❄️ Snow + ✨ Sparkles Script -->
+  <script>
+    for (let i = 0; i < 25; i++) {
+      const flake = document.createElement("div");
+      flake.classList.add("snowflake");
+      flake.innerHTML = "❄️";
+      flake.style.left = Math.random() * 100 + "vw";
+      flake.style.animationDuration = 3 + Math.random() * 5 + "s";
+      flake.style.opacity = Math.random();
+      flake.style.fontSize = 10 + Math.random() * 20 + "px";
+      document.body.appendChild(flake);
+    }
+
+    for (let i = 0; i < 15; i++) {
+      const sparkle = document.createElement("div");
+      sparkle.classList.add("sparkle");
+      sparkle.innerHTML = "✨";
+      sparkle.style.left = Math.random() * 100 + "vw";
+      sparkle.style.animationDuration = 4 + Math.random() * 6 + "s";
+      sparkle.style.opacity = Math.random();
+      sparkle.style.fontSize = 8 + Math.random() * 12 + "px";
+      document.body.appendChild(sparkle);
+    }
+  </script>
 
   <header>
     <h1>🌈 Rainbow AI</h1>
@@ -158,10 +237,7 @@
   <section class="hero">
     <h2>Create. Chat. Educate.</h2>
     <p>Rainbow AI is your smart learning assistant. Ask anything from NCERT Class 6 to 10 — powered by Dialogflow & designed for students like you.</p>
-    <div class="buttons">
-      <button onclick="document.querySelector('df-messenger').openChat()">Try Rainbow AI</button>
-      <button onclick="insertDemoQuestion()">Try Demo Question</button>
-    </div>
+    <div class="chat-arrow">⬇️</div>
   </section>
 
   <!-- Dialogflow Messenger -->
@@ -172,27 +248,6 @@
     agent-id="12607abd-3de2-40a1-aef3-498a0eae492f"
     language-code="en">
   </df-messenger>
-
-  <script>
-    // Auto-open chat after 3 seconds
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const df = document.querySelector('df-messenger');
-        if (df) df.openChat();
-      }, 3000);
-    });
-
-    // Insert demo question
-    function insertDemoQuestion() {
-      const input = document.querySelector('df-messenger')?.shadowRoot
-        ?.querySelector('df-messenger-chat')?.shadowRoot
-        ?.querySelector('input');
-      if (input) {
-        input.value = "What is matter?";
-        input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-      }
-    }
-  </script>
 
   <footer>
     © 2025 Rainbow AI. All rights reserved.
