@@ -1,42 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rainbow AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
-
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #7c3aed;
-      border-radius: 10px;
-    }
-
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
-      color: white;
-      font-weight: bold;
       overflow-x: hidden;
     }
 
+    /* Loader */
+    #loader {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+    }
+
+    #loader h1 {
+      font-size: 48px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px #a855f7, 0 0 20px #6366f1;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    #loader p {
+      font-size: 16px;
+      color: #e9d8fd;
+      font-style: italic;
+      text-shadow: 0 0 8px #6366f1;
+      margin-top: 10px;
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px #a855f7, 0 0 20px #6366f1; }
+      100% { text-shadow: 0 0 20px #a855f7, 0 0 40px #6366f1; }
+    }
+
+    /* Header */
     header {
       text-align: center;
       padding: 40px;
-      background-color: #000;
-      border-bottom: 1px solid #222;
+      color: white;
     }
 
     header h1 {
@@ -45,67 +64,29 @@
       background: linear-gradient(90deg, #a855f7, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: neon-glow 4s ease-in-out infinite alternate;
       text-shadow: 0 0 10px #a855f7, 0 0 20px #6366f1;
-      text-decoration: underline;
-    }
-
-    @keyframes neon-glow {
-      0% {
-        text-shadow: 0 0 10px #a855f7, 0 0 20px #6366f1;
-      }
-
-      100% {
-        text-shadow: 0 0 20px #a855f7, 0 0 40px #6366f1;
-      }
     }
 
     .hero {
       text-align: center;
       padding: 100px 20px;
-      animation: fadeUp 1.2s ease;
-      position: relative;
-      z-index: 1;
     }
 
-    .hero h2,
-    .hero p {
+    .hero h2 {
+      font-size: 56px;
+      font-weight: 900;
       background: linear-gradient(90deg, #a855f7, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 0px 0px 10px rgba(168, 85, 247, 0.7);
     }
 
-    .hero h2 {
-      font-size: 56px;
-      font-weight: 900;
-    }
-
-    .hero p {
-      font-size: 18px;
-      max-width: 700px;
-      margin: 20px auto;
-    }
-
-    @keyframes fadeUp {
-      0% {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     footer {
       text-align: center;
       padding: 30px;
       background: #111;
+      color: white;
       font-weight: bold;
-      z-index: 2;
-      position: relative;
     }
 
     df-messenger {
@@ -128,120 +109,47 @@
       border-radius: 50%;
     }
 
-    /* ❄️ Snowflake + ✨ Sparkle effects */
-    .snowflake, .sparkle {
-      position: fixed;
-      top: -10px;
-      z-index: 0;
-      pointer-events: none;
+    .typewriter-text::after {
+      content: "|";
+      animation: blink 1s infinite;
     }
 
-    .snowflake {
-      color: #a855f7;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .confetti {
+      position: fixed;
+      bottom: 0;
       font-size: 20px;
-      animation: fall linear infinite;
-    }
-
-    .sparkle {
-      color: #ffffff55;
-      font-size: 10px;
-      animation: sparkleFall linear infinite;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    @keyframes sparkleFall {
-      0% {
-        transform: translateY(0);
-        opacity: 0.8;
-      }
-
-      100% {
-        transform: translateY(100vh);
-        opacity: 0;
-      }
-    }
-
-    /* ↘️ Arrow pointing to chat icon */
-    .arrow-container {
-      position: fixed;
-      right: 80px;
-      bottom: 120px;
-      z-index: 100;
+      opacity: 0;
+      animation: rise 1.5s ease-out forwards;
       pointer-events: none;
     }
 
-    .chat-corner-arrow {
-      font-size: 36px;
-      animation: bounceDiagonal 2s infinite;
-      color: #a855f7;
-      text-shadow: 0 0 10px #a855f7;
-    }
-
-    @keyframes bounceDiagonal {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(8px, 8px) rotate(5deg); }
-      100% { transform: translate(0, 0) rotate(0deg); }
+    @keyframes rise {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-200px); opacity: 0; }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- 🎵 Background Music -->
-  <audio id="bgMusic" autoplay loop>
-    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/Komiku_-_Its_time_for_adventure/Komiku_-_02_-_Magic_Forest.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
-  </audio>
+  <!-- Loader -->
+  <div id="loader">
+    <h1>🌈 Rainbow AI Loading...</h1>
+    <p>Created by Arthav</p>
+  </div>
 
-  <!-- ❄️ Snow + ✨ Sparkles Script -->
-  <script>
-    for (let i = 0; i < 25; i++) {
-      const flake = document.createElement("div");
-      flake.classList.add("snowflake");
-      flake.innerHTML = "❄️";
-      flake.style.left = Math.random() * 100 + "vw";
-      flake.style.animationDuration = 3 + Math.random() * 5 + "s";
-      flake.style.opacity = Math.random();
-      flake.style.fontSize = 10 + Math.random() * 20 + "px";
-      document.body.appendChild(flake);
-    }
-
-    for (let i = 0; i < 15; i++) {
-      const sparkle = document.createElement("div");
-      sparkle.classList.add("sparkle");
-      sparkle.innerHTML = "✨";
-      sparkle.style.left = Math.random() * 100 + "vw";
-      sparkle.style.animationDuration = 4 + Math.random() * 6 + "s";
-      sparkle.style.opacity = Math.random();
-      sparkle.style.fontSize = 8 + Math.random() * 12 + "px";
-      document.body.appendChild(sparkle);
-    }
-  </script>
-
-  <header>
-    <h1>🌈 Rainbow AI</h1>
-  </header>
-
+  <!-- Header & Hero -->
+  <header><h1>🌈 Rainbow AI</h1></header>
   <section class="hero">
-    <h2>Create. Chat. Educate.</h2>
-    <p>Rainbow AI is your smart learning assistant. Ask anything from NCERT Class 6 to 10 — powered by Dialogflow & designed for students like you.</p>
+    <h2 class="typewriter-text" id="typewriter"></h2>
   </section>
 
-  <!-- ↘️ Arrow toward chatbot -->
-  <div class="arrow-container">
-    <div class="chat-corner-arrow">↘️</div>
-  </div>
+  <!-- Confetti Container -->
+  <div id="confetti-container"></div>
 
   <!-- Dialogflow Messenger -->
   <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
@@ -252,9 +160,44 @@
     language-code="en">
   </df-messenger>
 
-  <footer>
-    © 2025 Rainbow AI. All rights reserved.
-  </footer>
-</body>
+  <footer>© 2025 Rainbow AI. All rights reserved.</footer>
 
+  <!-- Scripts -->
+  <script>
+    // Loader fade out
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+      }, 3000);
+    });
+
+    // Typewriter animation
+    const txt = "Create. Chat. Educate.";
+    let i = 0;
+    const speed = 80;
+    function typeIt() {
+      if (i < txt.length) {
+        document.getElementById("typewriter").textContent += txt.charAt(i);
+        i++;
+        setTimeout(typeIt, speed);
+      }
+    }
+    setTimeout(typeIt, 3000);
+
+    // Confetti when chatbot opens
+    setTimeout(() => {
+      const container = document.getElementById("confetti-container");
+      for (let i = 0; i < 30; i++) {
+        const el = document.createElement("div");
+        el.classList.add("confetti");
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.bottom = "0";
+        el.style.color = "#a855f7";
+        el.textContent = "✨";
+        el.style.animationDelay = (Math.random() * 1.5) + "s";
+        container.appendChild(el);
+      }
+    }, 3500);
+  </script>
+</body>
 </html>
