@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rainbow AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #7c3aed;
+      border-radius: 10px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+      color: white;
+      font-weight: bold;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px;
+      background-color: #000;
+      border-bottom: 1px solid #222;
+    }
+
+    header h1 {
+      font-size: 64px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: neon-glow 4s ease-in-out infinite alternate;
+      text-shadow: 0 0 10px #a855f7, 0 0 20px #6366f1;
+      text-decoration: underline;
+    }
+
+    @keyframes neon-glow {
+      0% {
+        text-shadow: 0 0 10px #a855f7, 0 0 20px #6366f1;
+      }
+      100% {
+        text-shadow: 0 0 20px #a855f7, 0 0 40px #6366f1;
+      }
+    }
+
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+      animation: fadeUp 1.2s ease;
+    }
+
+    .hero h2,
+    .hero p,
+    .hero button {
+      background: linear-gradient(90deg, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0px 0px 10px rgba(168, 85, 247, 0.7);
+    }
+
+    .hero h2 {
+      font-size: 56px;
+      font-weight: 900;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 700px;
+      margin: 20px auto;
+    }
+
+    .hero .buttons {
+      margin-top: 30px;
+    }
+
+    .hero button {
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 16px;
+      border: 2px solid #8b5cf6;
+      border-radius: 6px;
+      background-color: transparent;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .hero button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #a855f7;
+    }
+
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #111;
+      font-weight: bold;
+    }
+
+    df-messenger {
+      --df-messenger-button-titlebar-color: #7c3aed;
+      --df-messenger-button-titlebar-font-color: #ffffff;
+      --df-messenger-chat-background-color: #1e1e1e;
+      --df-messenger-font-color: #e9d8fd;
+      --df-messenger-user-message: linear-gradient(90deg, #a855f7, #6366f1);
+      --df-messenger-user-font-color: #ffffff;
+      --df-messenger-bot-message: #2d2d2d;
+      --df-messenger-chatbox-width: 50vw;
+      --df-messenger-chatbox-height: 50vh;
+      --df-messenger-border-radius: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🌈 Rainbow AI</h1>
+  </header>
+
+  <section class="hero">
+    <h2>Create. Chat. Educate.</h2>
+    <p>Rainbow AI is your smart learning assistant. Ask anything from NCERT Class 6 to 10 — powered by Dialogflow & designed for students like you.</p>
+    <div class="buttons">
+      <button onclick="document.querySelector('df-messenger').openChat()">Try Rainbow AI</button>
+      <button onclick="insertDemoQuestion()">Try Demo Question</button>
+    </div>
+  </section>
+
+  <!-- Dialogflow Messenger -->
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <df-messenger
+    intent="WELCOME"
+    chat-title="RainbowAI"
+    agent-id="12607abd-3de2-40a1-aef3-498a0eae492f"
+    language-code="en">
+  </df-messenger>
+
+  <script>
+    // Auto-open chat after 3 seconds
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const df = document.querySelector('df-messenger');
+        if (df) df.openChat();
+      }, 3000);
+    });
+
+    // Insert demo question
+    function insertDemoQuestion() {
+      const input = document.querySelector('df-messenger').shadowRoot.querySelector('df-messenger-chat').shadowRoot.querySelector('input');
+      if (input) {
+        input.value = "What is matter?";
+        const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
+        input.dispatchEvent(event);
+      }
+    }
+  </script>
+
+  <footer>
+    © 2025 Rainbow AI. All rights reserved.
+  </footer>
+</body>
+
+</html>
