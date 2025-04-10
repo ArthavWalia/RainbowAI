@@ -53,6 +53,7 @@
       0% {
         text-shadow: 0 0 10px #a855f7, 0 0 20px #6366f1;
       }
+
       100% {
         text-shadow: 0 0 20px #a855f7, 0 0 40px #6366f1;
       }
@@ -111,6 +112,7 @@
         opacity: 0;
         transform: translateY(40px);
       }
+
       100% {
         opacity: 1;
         transform: translateY(0);
@@ -133,8 +135,16 @@
       --df-messenger-user-font-color: #ffffff;
       --df-messenger-bot-message: #2d2d2d;
       --df-messenger-chatbox-width: 50vw;
-      --df-messenger-chatbox-height: 50vh;
-      --df-messenger-border-radius: 16px;
+      --df-messenger-chatbox-height: 60vh;
+      --df-messenger-border-radius: 20px;
+      --df-messenger-minimized-chatbox-width: 60px;
+      --df-messenger-minimized-chatbox-height: 60px;
+    }
+
+    /* Glowing ring around minimized button (if supported) */
+    df-messenger::part(chat-button) {
+      box-shadow: 0 0 15px #a855f7, 0 0 30px #6366f1;
+      border-radius: 50%;
     }
   </style>
 </head>
@@ -174,11 +184,12 @@
 
     // Insert demo question
     function insertDemoQuestion() {
-      const input = document.querySelector('df-messenger').shadowRoot.querySelector('df-messenger-chat').shadowRoot.querySelector('input');
+      const input = document.querySelector('df-messenger')?.shadowRoot
+        ?.querySelector('df-messenger-chat')?.shadowRoot
+        ?.querySelector('input');
       if (input) {
         input.value = "What is matter?";
-        const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
-        input.dispatchEvent(event);
+        input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
       }
     }
   </script>
