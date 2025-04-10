@@ -6,6 +6,23 @@
   <title>Rainbow AI</title> 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
+    .snowflake {
+  color: #ffffff80;
+  font-size: 1.2em;
+  position: fixed;
+  top: -10px;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh);
+  }
+}
+
     html, body {
       margin: 0;
       padding: 0;
@@ -81,27 +98,6 @@
       text-shadow: 0px 0px 10px rgba(168, 85, 247, 0.7);
     }
 
-    .hero-img {
-      width: 250px;
-      max-width: 90%;
-      margin: 20px auto;
-      display: block;
-      filter: drop-shadow(0 0 20px #a855f7);
-      animation: fadeInUp 1.5s ease;
-      border-radius: 12px;
-      transition: transform 0.3s ease, filter 0.3s ease;
-    }
-
-    .hero-img:hover {
-      transform: scale(1.05);
-      filter: drop-shadow(0 0 30px #a855f7) brightness(1.1);
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
     footer {
       text-align: center;
       padding: 30px;
@@ -156,6 +152,24 @@
   </style>
 </head>
 <body>
+  <script>
+  function createSnowflake() {
+    const snowflake = document.createElement("div");
+    snowflake.classList.add("snowflake");
+    snowflake.textContent = "❄️";
+    snowflake.style.left = Math.random() * 100 + "vw";
+    snowflake.style.animationDuration = (Math.random() * 5 + 5) + "s";
+    snowflake.style.fontSize = (Math.random() * 12 + 12) + "px";
+    document.body.appendChild(snowflake);
+
+    setTimeout(() => {
+      snowflake.remove();
+    }, 10000);
+  }
+
+  setInterval(createSnowflake, 300);
+</script>
+
 
   <!-- Loader -->
   <div id="loader">
@@ -166,7 +180,6 @@
   <!-- Header & Hero -->
   <header><h1>🌈 Rainbow AI</h1></header>
   <section class="hero">
-    <img src="neon-robot-arm.png" alt="Robot Arm" class="hero-img" />
     <h2 class="typewriter-text" id="typewriter"></h2>
   </section>
 
