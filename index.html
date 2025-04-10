@@ -86,31 +86,6 @@
       margin: 20px auto;
     }
 
-    .chat-arrow {
-      font-size: 40px;
-      animation: bounceDown 1.5s infinite;
-      color: #a855f7;
-      text-shadow: 0 0 10px #a855f7;
-      margin-top: 60px;
-    }
-
-    @keyframes bounceDown {
-      0% {
-        transform: translateY(0);
-        opacity: 0.8;
-      }
-
-      50% {
-        transform: translateY(10px);
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(0);
-        opacity: 0.8;
-      }
-    }
-
     @keyframes fadeUp {
       0% {
         opacity: 0;
@@ -167,7 +142,7 @@
     }
 
     .sparkle {
-      color: #ffffff44;
+      color: #ffffff55;
       font-size: 10px;
       animation: sparkleFall linear infinite;
     }
@@ -195,14 +170,37 @@
         opacity: 0;
       }
     }
+
+    /* ↘️ Arrow pointing to chat icon */
+    .arrow-container {
+      position: fixed;
+      right: 80px;
+      bottom: 120px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .chat-corner-arrow {
+      font-size: 36px;
+      animation: bounceDiagonal 2s infinite;
+      color: #a855f7;
+      text-shadow: 0 0 10px #a855f7;
+    }
+
+    @keyframes bounceDiagonal {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(8px, 8px) rotate(5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
   </style>
 </head>
 
 <body>
 
   <!-- 🎵 Background Music -->
-  <audio autoplay loop volume="0.1">
-    <source src="https://cdn.pixabay.com/download/audio/2022/12/23/audio_7e01fda2c3.mp3" type="audio/mpeg">
+  <audio id="bgMusic" autoplay loop>
+    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/Komiku_-_Its_time_for_adventure/Komiku_-_02_-_Magic_Forest.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
   </audio>
 
   <!-- ❄️ Snow + ✨ Sparkles Script -->
@@ -237,8 +235,12 @@
   <section class="hero">
     <h2>Create. Chat. Educate.</h2>
     <p>Rainbow AI is your smart learning assistant. Ask anything from NCERT Class 6 to 10 — powered by Dialogflow & designed for students like you.</p>
-    <div class="chat-arrow">⬇️</div>
   </section>
+
+  <!-- ↘️ Arrow toward chatbot -->
+  <div class="arrow-container">
+    <div class="chat-corner-arrow">↘️</div>
+  </div>
 
   <!-- Dialogflow Messenger -->
   <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
