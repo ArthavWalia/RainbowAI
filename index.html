@@ -6,6 +6,104 @@
   <title>Rainbow AI</title> 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
+    /* Fullscreen Chat */
+    #chatWindow.fullscreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(145deg, #1a152b, #1f1b2e);
+      display: flex;
+      flex-direction: column;
+      z-index: 9999;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    #chatHeader {
+      background: linear-gradient(90deg, #a855f7, #6366f1);
+      padding: 14px;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    #chatMessages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #14121d;
+    }
+
+    .chat-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chat-bubble {
+      padding: 12px 16px;
+      border-radius: 16px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+
+    .user-bubble {
+      background: #8b5cf6;
+      color: white;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot-bubble {
+      background: #4f46e5;
+      color: white;
+      border-bottom-left-radius: 0;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-size: cover;
+    }
+
+    #chatInputContainer {
+      display: flex;
+      border-top: 1px solid #333;
+      padding: 10px;
+    }
+
+    #chatInput {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: #2c2a3a;
+      color: white;
+      font-size: 14px;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+    }
+
+    #sendBtn {
+      background: #a855f7;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -14,7 +112,6 @@
       overflow-x: hidden;
     }
 
-    /* Toggle Music Button */
     #toggleMusic {
       position: fixed;
       bottom: 20px;
@@ -30,7 +127,6 @@
       z-index: 10000;
     }
 
-    /* Snowflakes */
     .snowflake {
       color: #ffffff80;
       font-size: 1.2em;
@@ -48,7 +144,6 @@
       }
     }
 
-    /* Loader */
     #loader {
       position: fixed;
       width: 100%;
@@ -122,26 +217,6 @@
       font-weight: bold;
     }
 
-    df-messenger {
-      --df-messenger-button-titlebar-color: #7c3aed;
-      --df-messenger-button-titlebar-font-color: #ffffff;
-      --df-messenger-chat-background-color: #1e1e1e;
-      --df-messenger-font-color: #e9d8fd;
-      --df-messenger-user-message: linear-gradient(90deg, #a855f7, #6366f1);
-      --df-messenger-user-font-color: #ffffff;
-      --df-messenger-bot-message: #2d2d2d;
-      --df-messenger-chatbox-width: 50vw;
-      --df-messenger-chatbox-height: 60vh;
-      --df-messenger-border-radius: 20px;
-      --df-messenger-minimized-chatbox-width: 60px;
-      --df-messenger-minimized-chatbox-height: 60px;
-    }
-
-    df-messenger::part(chat-button) {
-      box-shadow: 0 0 15px #a855f7, 0 0 30px #6366f1;
-      border-radius: 50%;
-    }
-
     .typewriter-text::after {
       content: "|";
       animation: blink 1s infinite;
@@ -165,11 +240,12 @@
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(-200px); opacity: 0; }
     }
+
   </style>
 </head>
 <body>
 
-  <!-- Audio -->
+  <!-- Music -->
   <audio id="bgMusic" loop autoplay muted>
     <source src="music.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
@@ -181,8 +257,10 @@
     <p>Created by Arthav</p>
   </div>
 
-  <!-- Header & Hero -->
+  <!-- Header -->
   <header><h1>🌈 Rainbow AI</h1></header>
+
+  <!-- Hero Section -->
   <section class="hero">
     <h2 class="typewriter-text" id="typewriter"></h2>
   </section>
@@ -190,85 +268,121 @@
   <!-- Confetti Container -->
   <div id="confetti-container"></div>
 
-  <!-- Dialogflow Messenger -->
-  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-  <df-messenger
-    intent="WELCOME"
-    chat-title="RainbowAI"
-    agent-id="12607abd-3de2-40a1-aef3-498a0eae492f"
-    language-code="en">
-  </df-messenger>
-
-  <!-- Toggle Music Button -->
+  <!-- Music Toggle -->
   <button id="toggleMusic">🔇</button>
+
+  <!-- Chat Window -->
+  <div id="chatWindow" class="fullscreen">
+    <div id="chatHeader">🌈 Rainbow AI</div>
+    <div id="chatMessages"></div>
+    <div id="chatInputContainer">
+      <input type="text" id="chatInput" placeholder="Ask Rainbow AI..." />
+      <button id="sendBtn">➤</button>
+    </div>
+  </div>
 
   <footer>© 2025 Rainbow AI. All rights reserved.</footer>
 
-  <!-- Scripts -->
+  <!-- JS -->
   <script>
-    // Loader fade out
+    // Loader
     window.addEventListener("load", () => {
       setTimeout(() => {
         document.getElementById("loader").style.display = "none";
       }, 3000);
     });
 
-    // Typewriter animation
+    // Typewriter Effect
     const txt = "Create. Chat. Educate.";
     let i = 0;
-    const speed = 80;
-    function typeIt() {
+    function typeWriter() {
       if (i < txt.length) {
-        document.getElementById("typewriter").textContent += txt.charAt(i);
+        document.getElementById("typewriter").innerHTML += txt.charAt(i);
         i++;
-        setTimeout(typeIt, speed);
+        setTimeout(typeWriter, 100);
       }
     }
-    setTimeout(typeIt, 3000);
+    typeWriter();
 
-    // Confetti animation
-    setTimeout(() => {
-      const container = document.getElementById("confetti-container");
-      for (let i = 0; i < 30; i++) {
-        const el = document.createElement("div");
-        el.classList.add("confetti");
-        el.style.left = Math.random() * 100 + "vw";
-        el.style.bottom = "0";
-        el.style.color = "#a855f7";
-        el.textContent = "✨";
-        el.style.animationDelay = (Math.random() * 1.5) + "s";
-        container.appendChild(el);
+    // Music Toggle
+    const bgMusic = document.getElementById("bgMusic");
+    const toggleMusicBtn = document.getElementById("toggleMusic");
+    toggleMusicBtn.addEventListener("click", () => {
+      if (bgMusic.muted) {
+        bgMusic.muted = false;
+        toggleMusicBtn.textContent = "🔊";
+      } else {
+        bgMusic.muted = true;
+        toggleMusicBtn.textContent = "🔇";
       }
-    }, 3500);
+    });
 
     // Snowflakes
-    function createSnowflake() {
+    for (let i = 0; i < 50; i++) {
       const snowflake = document.createElement("div");
-      snowflake.classList.add("snowflake");
       snowflake.textContent = "❄️";
-      snowflake.style.left = Math.random() * 100 + "vw";
-      snowflake.style.animationDuration = (Math.random() * 5 + 5) + "s";
-      snowflake.style.fontSize = (Math.random() * 12 + 12) + "px";
+      snowflake.classList.add("snowflake");
+      snowflake.style.left = `${Math.random() * 100}vw`;
+      snowflake.style.animationDuration = `${Math.random() * 5 + 5}s`;
+      snowflake.style.animationDelay = `${Math.random() * 5}s`;
       document.body.appendChild(snowflake);
-      setTimeout(() => snowflake.remove(), 10000);
     }
-    setInterval(createSnowflake, 300);
 
-    // Music toggle button
-    const music = document.getElementById("bgMusic");
-    const toggleBtn = document.getElementById("toggleMusic");
+    // Confetti
+    function generateConfetti() {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      confetti.textContent = "🎉";
+      confetti.style.left = `${Math.random() * 100}vw`;
+      confetti.style.animationDuration = `${Math.random() * 1 + 1}s`;
+      document.getElementById("confetti-container").appendChild(confetti);
+      setTimeout(() => confetti.remove(), 1500);
+    }
+    setInterval(generateConfetti, 100);
 
-    toggleBtn.addEventListener("click", () => {
-      if (music.muted) {
-        music.muted = false;
-        music.play();
-        toggleBtn.textContent = "🔊";
-      } else {
-        music.muted = true;
-        toggleBtn.textContent = "🔇";
+    // Chat UI
+    const chatMessages = document.getElementById("chatMessages");
+    const chatInput = document.getElementById("chatInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    function appendMessage(message, isUser = true) {
+      const messageContainer = document.createElement("div");
+      messageContainer.classList.add("chat-row");
+      messageContainer.innerHTML = `
+        <div class="avatar" style="background: ${isUser ? 'url(user-avatar.png)' : 'url(bot-avatar.png)'};"></div>
+        <div class="chat-bubble ${isUser ? 'user-bubble' : 'bot-bubble'}">${message}</div>
+      `;
+      chatMessages.appendChild(messageContainer);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendMessageToGPT(userMessage) {
+      const response = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage })
+      });
+      const data = await response.json();
+      return data.reply;
+    }
+
+    async function handleUserInput() {
+      const userMessage = chatInput.value.trim();
+      if (userMessage) {
+        appendMessage(userMessage, true);
+        chatInput.value = "";
+        const botResponse = await sendMessageToGPT(userMessage);
+        appendMessage(botResponse, false);
+      }
+    }
+
+    sendBtn.addEventListener("click", handleUserInput);
+
+    chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        handleUserInput();
       }
     });
   </script>
-
 </body>
 </html>
